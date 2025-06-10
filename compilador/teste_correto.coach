@@ -1,0 +1,24 @@
+/* teste_correto.coach
+   Cenário com dois times e uma partida válida.
+*/
+
+DEFINIR time "Titas da Tatica" {
+    ataque = 88;
+    defesa = 82;
+    meio_campo = 90;
+    formacao = "4-4-2";
+    estrategia = "Posse de bola";
+}
+
+DEFINIR time "Gigantes do Gole" {
+    ataque = 95;
+    defesa = 70;
+    meio_campo = 80;
+    formacao = "4-3-3";
+    estrategia = "Contra-ataque";
+}
+
+PARTIDA {
+    casa = "Titas da Tatica";
+    visitante = "Gigantes do Gole";
+}

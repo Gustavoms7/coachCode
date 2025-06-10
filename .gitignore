@@ -1,0 +1,22 @@
+# Arquivos gerados pelo Flex e Bison
+lex.yy.c
+coach.tab.c
+coach.tab.h
+
+# Executáveis compilados
+*.exe
+*.o
+*.out
+meu_analisador
+
+# Cache e arquivos temporários do Python
+__pycache__/
+*.pyc
+
+# Arquivos de IDEs e editores
+.vscode/
+.idea/
+
+# Arquivos de sistema operacional
+.DS_Store
+Thumbs.db

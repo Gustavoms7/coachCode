@@ -1,0 +1,23 @@
+
+/* Definindo os times da final */
+DEFINIR time "Real Coders" {
+    ataque = 90;
+    defesa = 75;
+    meio_campo = 80;
+    formacao = "4-3-3";
+    estrategia = "Pressao alta";
+}
+
+DEFINIR time "BugsUnited FC" {
+    ataque = 70;
+    defesa = 92;
+    meio_campo = 85;
+    formacao = "5-3-2";
+    estrategia = "Defesa solida";
+}
+
+/* Configurando a partida final */
+PARTIDA {
+    casa = "Real Coders";
+    visitante = "BugsUnited FC";
+}
