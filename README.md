@@ -1,116 +1,85 @@
-# coachCode
-Repositório criado para a realização da APS de Lógica Computacional
+# coachCode ⚽
+Repositório criado para a realização da Atividade Prática Supervisionada (APS) de Lógica Computacional.
 
-Gustavo Mendes
+**Autor:** Gustavo Mendes
+
+---
 
 ## O coachCode
-SoccerScript é uma linguagem de domínio específico (DSL) criada para simular a experiência de ser um técnico de futebol. Com ela, é possível gerenciar a contratação de jogadores respeitando um orçamento definido, configurar formações táticas (como 4-4-2 ou 3-5-2), definir estratégias de jogo (como ataque rápido ou posse de bola) e treinar atributos do time, como chute e resistência. Além disso, a linguagem permite a simulação de partidas usando estruturas condicionais, possibilitando a execução de ações como atacar, defender, passar e substituir jogadores com base nas características do time e do adversário. O objetivo é oferecer uma forma divertida e programável de aplicar conceitos de lógica e estrutura de linguagens, aproximando o mundo do futebol da computação.
+O **coachCode** é uma linguagem de domínio específico (DSL) e declarativa, criada para modelar as características de times de futebol e configurar uma partida. A linguagem permite definir os atributos de uma equipe (ataque, defesa, etc.) e suas táticas.
 
-## Gramatica EBNF
+O projeto foi desenvolvido em duas etapas principais, cumprindo os requisitos da disciplina:
+1.  Um **Analisador Sintático** (usando Flex e Bison) que valida a estrutura do código.
+2.  Um **Interpretador** (escrito em Python) que executa o código, gerando um relatório de análise tática.
 
-```
-LETTER = ( "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z" |
-           "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" );
+---
 
-DIGIT = ( "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" );
+## Características
+* **Sintaxe Declarativa:** O código descreve os times e a partida de forma direta, sem a necessidade de algoritmos complexos ou lógica de fluxo.
+* **Modelagem de Atributos:** Permite definir a força de cada time através de valores numéricos para `ataque`, `defesa` e `meio_campo`, além de táticas como `formacao` e `estrategia`.
+* **Análise em Duas Etapas:**
+    * **Analisador Sintático (Flex/Bison):** Esta implementação foca exclusivamente em validar se um arquivo `.coach` está escrito corretamente de acordo com a gramática definida. A saída confirma apenas se a sintaxe é válida ou não.
+    * **Interpretador (Python):** Esta implementação vai além da validação. Ela lê os dados, armazena o estado dos times e **executa uma análise tática**, gerando o relatório (o feedback) como saída final.
 
-NUMBER = DIGIT, {DIGIT};
+---
 
-STRING = '"', {LETTER | " "}, '"';
+## Como Executar
+O projeto possui duas implementações distintas que podem ser executadas.
 
-IDENTIFIER = LETTER, {LETTER | DIGIT | "_"};  
+### Versão 1: Analisador Sintático (Flex & Bison)
+O objetivo desta etapa é **apenas validar a sintaxe** do código.
 
-VALUE = STRING | NUMBER | LIST | PLAYER | SPELL | MISSION;
+**Pré-requisitos:** `flex`, `bison`, `gcc` (ou `clang`).
 
-LIST = "[", VALUE, {",", VALUE}, "]";
+**Passos (via terminal, na pasta `flex/`):**
+1.  **Gerar os arquivos do parser e do scanner:**
+    ```bash
+    bison -d coach.y
+    flex coach.l
+    ```
+2.  **Compilar o analisador:**
+    ```bash
+    gcc coach.tab.c lex.yy.c -o meu_analisador
+    ```
+3.  **Executar a validação sintática:**
+    ```bash
+    ./meu_analisador < exemplo.coach
+    ```
 
-COMMENT = "/*", {LETTER | DIGIT | " "}, "*/";
+### Versão 2: Interpretador de Análise Tática (Python)
+Esta versão **executa a análise tática** e gera o relatório como saída.
 
-TEAM = "time", IDENTIFIER, "(", "orcamento", NUMBER, ")", "{", { PLAYER_CONTRACT }, "}";
+**Pré-requisitos:** `Python 3.x`.
 
-PLAYER_CONTRACT = "contratar", "(", STRING, ",", NUMBER, ")", ";";
+**Passos (via terminal, na pasta `compilador/`):**
+1.  **Executar o interpretador:**
+    ```bash
+    python compilador.py exemplo.coach
+    ```
 
-FORMATION = "formacao", "(", NUMBER, ",", NUMBER, ",", NUMBER, ")", ";";
+---
 
-STRATEGY = "estrategia", "(", STRING, ")", ";";
+## Exemplo de Código (`exemplo.coach`)
+```coach
+/* Arquivo de exemplo para demonstrar a sintaxe do coachCode */
 
-TRAINING = "treino", IDENTIFIER, "{", { TRAINING_ACTION }, "}";
+DEFINIR time "Real Coders" {
+    ataque = 90;
+    defesa = 75;
+    meio_campo = 80;
+    formacao = "4-3-3";
+    estrategia = "Pressao alta";
+}
 
-TRAINING_ACTION = "treinar", "(", STRING, ",", NUMBER, ")", ";";
+DEFINIR time "BugsUnited FC" {
+    ataque = 70;
+    defesa = 92;
+    meio_campo = 85;
+    formacao = "5-3-2";
+    estrategia = "Defesa solida";
+}
 
-MATCH = "jogo", IDENTIFIER, "{", { COMMAND }, "}";
-
-COMMAND = CONDITIONAL
-        | ACTION
-        ;
-
-CONDITIONAL = "se", "(", EXPRESSION, ")", "{", { COMMAND }, "}", [ "senao", "{", { COMMAND }, "}" ];
-
-EXPRESSION = IDENTIFIER, ".", ATTRIBUTE, COMPARISON_OPERATOR, NUMBER;
-
-ATTRIBUTE = "ataque" | "defesa" | "energia" | "habilidade";
-
-COMPARISON_OPERATOR = ">" | "<" | "==" | "!=";
-
-ACTION = "chute", "(", STRING, ")", ";"
-       | "passe", "(", STRING, ")", ";"
-       | "defesa", "(", ")", ";"
-       | "substituicao", "(", STRING, ",", STRING, ")", ";"
-       | "atacar", "(", ")", ";"
-       | "defender", "(", ")", ";"
-       ;
-
-BLOCK = "{", { STATEMENT }, "}";
-
-STATEMENT = TEAM
-          | FORMATION
-          | STRATEGY
-          | TRAINING
-          | MATCH
-          | CHARACTER
-          | SPELL
-          | MISSION
-          | CAST
-          | CONDITIONAL
-          | LOOP
-          | ASSIGNMENT
-          | EXPRESSION
-          | ADVANCE_MISSION
-          ;
-
-ASSIGNMENT = IDENTIFIER, ".", IDENTIFIER, "=", EXPRESSION, ";";
-
-LOOP = "WHILE_THE_MOON_SHINES", CONDITION_BLOCK, BLOCK;
-
-CONDITION_BLOCK = CONDITION, BLOCK;
-
-CONDITION = EXPRESSION, ("<" | ">" | "=" | "!="), EXPRESSION;
-
-ADVANCE_MISSION = "MISSION_STEP", STRING, "TO", STRING, ";";
-
-CAST = "CAST", "SPELL", STRING, "BY", STRING, "ON", STRING, ";";
-
-MISSION = "CREATE", "mission", STRING, "{", 
-          "objective", "=", STRING, ";", 
-          "participants", "=", LIST, ";", 
-          "reward", "=", LIST, ";", 
-          "location", "=", STRING, ";", 
-          "}";
-
-SPELL = "CREATE", "spell", STRING, "{", 
-        "power", "=", NUMBER, ";", 
-        "mana_cost", "=", NUMBER, ";", 
-        "effect", "=", STRING, ";", 
-        "}";
-
-PLAYER = "CREATE", "character", STRING, "{", 
-         "attributes", "=", "{", 
-         "strength", "=", NUMBER, ";", 
-         "mana", "=", NUMBER, ";", 
-         "life", "=", NUMBER, ";", 
-         "mana_regen", "=", NUMBER, ";", 
-         "inventory", "=", LIST, ";",     
-         "}", "}";
-
-
-```
+PARTIDA {
+    casa = "Real Coders";
+    visitante = "BugsUnited FC";
+}
