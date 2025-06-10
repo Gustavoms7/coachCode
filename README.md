@@ -18,9 +18,9 @@ NUMBER = DIGIT, {DIGIT};
 
 STRING = '"', {LETTER | " "}, '"';
 
-IDENTIFIER = LETTER, {LETTER | DIGIT | "_"};  
+IDENTIFIER = LETTER, {LETTER | DIGIT | "_"};
 
-VALUE = STRING | NUMBER | LIST | PLAYER | SPELL | MISSION;
+VALUE = STRING | NUMBER | LIST;
 
 LIST = "[", VALUE, {",", VALUE}, "]";
 
@@ -67,50 +67,6 @@ STATEMENT = TEAM
           | STRATEGY
           | TRAINING
           | MATCH
-          | CHARACTER
-          | SPELL
-          | MISSION
-          | CAST
-          | CONDITIONAL
-          | LOOP
-          | ASSIGNMENT
-          | EXPRESSION
-          | ADVANCE_MISSION
           ;
-
-ASSIGNMENT = IDENTIFIER, ".", IDENTIFIER, "=", EXPRESSION, ";";
-
-LOOP = "WHILE_THE_MOON_SHINES", CONDITION_BLOCK, BLOCK;
-
-CONDITION_BLOCK = CONDITION, BLOCK;
-
-CONDITION = EXPRESSION, ("<" | ">" | "=" | "!="), EXPRESSION;
-
-ADVANCE_MISSION = "MISSION_STEP", STRING, "TO", STRING, ";";
-
-CAST = "CAST", "SPELL", STRING, "BY", STRING, "ON", STRING, ";";
-
-MISSION = "CREATE", "mission", STRING, "{", 
-          "objective", "=", STRING, ";", 
-          "participants", "=", LIST, ";", 
-          "reward", "=", LIST, ";", 
-          "location", "=", STRING, ";", 
-          "}";
-
-SPELL = "CREATE", "spell", STRING, "{", 
-        "power", "=", NUMBER, ";", 
-        "mana_cost", "=", NUMBER, ";", 
-        "effect", "=", STRING, ";", 
-        "}";
-
-PLAYER = "CREATE", "character", STRING, "{", 
-         "attributes", "=", "{", 
-         "strength", "=", NUMBER, ";", 
-         "mana", "=", NUMBER, ";", 
-         "life", "=", NUMBER, ";", 
-         "mana_regen", "=", NUMBER, ";", 
-         "inventory", "=", LIST, ";",     
-         "}", "}";
-
 
 ```
