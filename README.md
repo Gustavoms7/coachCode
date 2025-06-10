@@ -13,6 +13,10 @@ O projeto foi desenvolvido em duas etapas principais, cumprindo os requisitos da
 2.  Um **Interpretador** (escrito em Python) que executa o código, gerando um relatório de análise tática.
 
 ---
+---
+## Apresentação canva: 
+https://www.canva.com/design/DAGp9p7O6CY/0i0r25KSW6X-bkaT23uzNA/edit?utm_content=DAGp9p7O6CY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+---
 ## Gramatica EBNF
 
 
