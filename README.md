@@ -83,3 +83,46 @@ PARTIDA {
     casa = "Real Coders";
     visitante = "BugsUnited FC";
 }
+```
+---
+
+## Exemplos de Saída
+Abaixo estão as saídas esperadas para o arquivo `exemplo.coach` em cada versão.
+
+### Saída da Versão 1 (Flex & Bison)
+*Esta saída confirma que a sintaxe do arquivo é válida.*
+```text
+--- Iniciando Analise Sintatica do coachCode ---
+
+>> Time '"Real Coders"' definido com sucesso!
+   Ataque: 90, Defesa: 75, Meio-campo: 80
+   Formacao: "4-3-3", Estrategia: "Pressao alta"
+
+>> Time '"BugsUnited FC"' definido com sucesso!
+   Ataque: 70, Defesa: 92, Meio-campo: 85
+   Formacao: "5-3-2", Estrategia: "Defesa solida"
+
+>> Partida configurada: "Real Coders" (casa) vs. "BugsUnited FC" (visitante)
+
+--- Analise sintatica concluida com sucesso. ---
+```
+
+### Saída da Versão 2 (Compilador)
+*Esta saída é o relatório gerado pela execução e análise do código..*
+```text
+--- Iniciando Analise do coachCode ---
+>> Time "Real Coders" definido com sucesso.
+>> Time "BugsUnited FC" definido com sucesso.
+
+--- RELATÓRIO TÁTICO: Real Coders vs. BugsUnited FC ---
+
+[CONFRONTO DIRETO]
+- Ataque Casa (90) vs. Defesa Visitante (92): Vantagem Visitante
+- Meio-Campo Casa (80) vs. Meio-Campo Visitante (85): Vantagem Visitante
+- Defesa Casa (75) vs. Ataque Visitante (70): Vantagem Casa
+
+[SUGESTÃO PARA O TIME DA CASA: Real Coders]
+- O adversário joga com 'Defesa solida'. Sugestão: adote uma estratégia de 'Posse de bola' para ter paciência e encontrar espaços.
+
+--- Analise concluida com sucesso ---
+```
