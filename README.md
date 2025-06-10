@@ -13,6 +13,69 @@ O projeto foi desenvolvido em duas etapas principais, cumprindo os requisitos da
 2.  Um **Interpretador** (escrito em Python) que executa o código, gerando um relatório de análise tática.
 
 ---
+## Gramatica EBNF
+
+
+
+```
+
+LETTER = ( "a" | "b" | "c" | ... | "Z" );
+
+DIGIT = ( "0" | "1" | ... | "9" );
+
+NUMBER = DIGIT, {DIGIT};
+
+STRING = '"', {LETTER | DIGIT | " "}, '"';
+
+COMMENT = "/*", {LETTER | DIGIT | " "}, "*/";
+
+
+
+/* --- Definições Específicas de Futebol --- */
+
+
+
+FORMACAO_TIPO = "4-4-2" | "4-3-3" | "3-5-2" | "5-3-2" ;
+
+ESTRATEGIA_TIPO = "Contra-ataque" | "Posse de bola" | "Pressao alta" | "Defesa solida" ;
+
+
+
+/* --- Estrutura Principal da Linguagem --- */
+
+
+
+PROGRAMA = {DEFINIR_TIME}, {PARTIDA};
+
+
+
+DEFINIR_TIME = "DEFINIR", "time", STRING, "{", 
+
+    "ataque", "=", NUMBER, ";",
+
+    "defesa", "=", NUMBER, ";",
+
+    "meio_campo", "=", NUMBER, ";",
+
+    "formacao", "=", FORMACAO_TIPO, ";",
+
+    "estrategia", "=", ESTRATEGIA_TIPO, ";",
+
+    "}" ;
+
+
+
+PARTIDA = "PARTIDA", "{",
+
+    "casa", "=", STRING, ";",
+
+    "visitante", "=", STRING, ";",
+
+    "}" ;
+
+
+
+```
 
 ## Características
 * **Sintaxe Declarativa:** O código descreve os times e a partida de forma direta, sem a necessidade de algoritmos complexos ou lógica de fluxo.
