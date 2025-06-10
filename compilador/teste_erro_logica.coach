@@ -1,16 +1,15 @@
-/* teste_erro_logica.coach
-   A sintaxe está perfeita, mas o time "Time Fantasma" não foi definido.
-*/
+/* teste_erros.coach */
 
-DEFINIR time "Time Real" {
-    ataque = 80;
-    defesa = 75;
-    meio_campo = 85;
-    formacao = "4-4-2";
-    estrategia = "Posse de bola";
+DEFINIR time "Time C" {
+    ataque = 50;
+    defesa = 50;
+    meio_campo = 50;
+    formacao = 5-3-2;
+    estrategia = Contra-ataque;
 }
 
+/* Erro: Tentando usar um time que não foi definido */
 PARTIDA {
-    casa = "Time Real";
+    casa = "Time C";
     visitante = "Time Fantasma";
 }

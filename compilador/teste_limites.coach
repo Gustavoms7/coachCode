@@ -1,0 +1,21 @@
+/* teste_limite.coach */
+
+DEFINIR time "Time Solitario" {
+    ataque = 99;
+    defesa = 99;
+    meio_campo = 99;
+    formacao = 4-3-3;
+    estrategia = Posse de bola;
+}
+
+MOSTRAR "Este teste não deve mostrar nenhuma repetição.";
+
+REPETIR 0 VEZES {
+    MOSTRAR "Esta mensagem NUNCA deve aparecer.";
+    PARTIDA {
+        casa = "Time Solitario";
+        visitante = "Time Solitario";
+    }
+}
+
+MOSTRAR "Análise de casos limite concluída.";

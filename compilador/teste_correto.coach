@@ -1,24 +1,39 @@
-/* teste_correto.coach
-   Cenário com dois times e uma partida válida.
+/*
+  APS Lógica Computacional - Exemplo Final
+  Linguagem: coachCode
+  Demonstração de definição de times, condicionais,
+  loops e simulação com aleatoriedade.
 */
 
-DEFINIR time "Titas da Tatica" {
-    ataque = 88;
-    defesa = 82;
-    meio_campo = 90;
-    formacao = "4-4-2";
-    estrategia = "Posse de bola";
-}
-
-DEFINIR time "Gigantes do Gole" {
+DEFINIR time "Guerreiros da IA" {
     ataque = 95;
     defesa = 70;
-    meio_campo = 80;
-    formacao = "4-3-3";
-    estrategia = "Contra-ataque";
+    meio_campo = 88;
+    formacao = 4-3-3;
+    estrategia = Pressao alta;
 }
 
-PARTIDA {
-    casa = "Titas da Tatica";
-    visitante = "Gigantes do Gole";
+DEFINIR time "Gigantes do Algoritmo" {
+    ataque = 82;
+    defesa = 85;
+    meio_campo = 90;
+    formacao = 3-5-2;
+    estrategia = Posse de bola;
+}
+
+MOSTRAR "Análise pré-jogo iniciada.";
+
+SE time."Guerreiros da IA".ataque > time."Gigantes do Algoritmo".ataque ENTAO {
+    MOSTRAR "Os Guerreiros possuem um ataque nominalmente superior.";
+} SENAO {
+    MOSTRAR "Os Gigantes possuem um ataque nominalmente superior ou equivalente.";
+}
+
+MOSTRAR "Iniciando simulação de 3 confrontos...";
+
+REPETIR 3 VEZES {
+    PARTIDA {
+        casa = "Guerreiros da IA";
+        visitante = "Gigantes do Algoritmo";
+    }
 }
