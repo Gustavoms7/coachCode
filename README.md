@@ -6,11 +6,9 @@ Repositório criado para a realização da Atividade Prática Supervisionada (AP
 ---
 
 ## O coachCode
-O **coachCode** é uma linguagem de domínio específico (DSL) e declarativa, criada para modelar as características de times de futebol e configurar uma partida. A linguagem permite definir os atributos de uma equipe (ataque, defesa, etc.) e suas táticas.
+O coachCode é uma linguagem de domínio específico (DSL) projetada para a análise tática de partidas de futebol. Ela combina uma sintaxe declarativa para modelar as características de times (ataque, defesa, formação, etc.) com comandos procedurais que permitem a criação de simulações dinâmicas e análises condicionais.
 
-O projeto foi desenvolvido em duas etapas principais, cumprindo os requisitos da disciplina:
-1.  Um **Analisador Sintático** (usando Flex e Bison) que valida a estrutura do código.
-2.  Um **Interpretador** (escrito em Python) que executa o código, gerando um relatório de análise tática.
+O objetivo da linguagem é permitir que um "técnico" configure seus times e, em seguida, execute scripts para obter relatórios táticos, testar cenários e simular o resultado de confrontos, que variam a cada execução graças a um "Fator Sorte" que torna as partidas imprevisíveis.
 
 ---
 ---
@@ -22,98 +20,59 @@ https://www.canva.com/design/DAGp9p7O6CY/0i0r25KSW6X-bkaT23uzNA/edit?utm_content
 
 
 ```
+PROGRAMA = {COMANDO};
 
-LETTER = ( "a" | "b" | "c" | ... | "Z" );
+/* --- Comandos Principais --- */
+COMANDO = ( DEFINIR_TIME | PARTIDA | BLOCO_SE | BLOCO_REPETIR | MOSTRAR_COMANDO | COMMENT );
 
-DIGIT = ( "0" | "1" | ... | "9" );
-
-NUMBER = DIGIT, {DIGIT};
-
-STRING = '"', {LETTER | DIGIT | " "}, '"';
-
-COMMENT = "/*", {LETTER | DIGIT | " "}, "*/";
-
-
-
-/* --- Definições Específicas de Futebol --- */
-
-
-
-FORMACAO_TIPO = "4-4-2" | "4-3-3" | "3-5-2" | "5-3-2" ;
-
-ESTRATEGIA_TIPO = "Contra-ataque" | "Posse de bola" | "Pressao alta" | "Defesa solida" ;
-
-
-
-/* --- Estrutura Principal da Linguagem --- */
-
-
-
-PROGRAMA = {DEFINIR_TIME}, {PARTIDA};
-
-
-
-DEFINIR_TIME = "DEFINIR", "time", STRING, "{", 
-
-    "ataque", "=", NUMBER, ";",
-
-    "defesa", "=", NUMBER, ";",
-
-    "meio_campo", "=", NUMBER, ";",
-
-    "formacao", "=", FORMACAO_TIPO, ";",
-
-    "estrategia", "=", ESTRATEGIA_TIPO, ";",
-
-    "}" ;
-
-
+DEFINIR_TIME = "DEFINIR", "time", STRING, "{", 
+    "ataque", "=", NUMBER, ";",
+    "defesa", "=", NUMBER, ";",
+    "meio_campo", "=", NUMBER, ";",
+    "formacao", "=", VALOR_TEXTO, ";",
+    "estrategia", "=", VALOR_TEXTO, ";",
+    "}" ;
 
 PARTIDA = "PARTIDA", "{",
+    "casa", "=", STRING, ";",
+    "visitante", "=", STRING, ";",
+    "}" ;
 
-    "casa", "=", STRING, ";",
+/* --- Comandos de Controle de Fluxo --- */
+BLOCO_SE = "SE", CONDICAO, "ENTAO", "{", {COMANDO}, "}", [ "SENAO", "{", {COMANDO}, "}" ];
 
-    "visitante", "=", STRING, ";",
+BLOCO_REPETIR = "REPETIR", NUMBER, "VEZES", "{", {COMANDO}, "}";
 
-    "}" ;
+MOSTRAR_COMANDO = "MOSTRAR", STRING, ";";
 
+/* --- Estruturas de Condição --- */
+CONDICAO = VALOR, OPERADOR_COMPARACAO, VALOR;
+VALOR = ( NUMBER | ATRIBUTO_TIME );
+ATRIBUTO_TIME = "time", ".", STRING, ".", ("ataque" | "defesa" | "meio_campo");
+OPERADOR_COMPARACAO = ">" | "<" | "==" ;
 
-
+/* --- Literais e Tipos Básicos --- */
+VALOR_TEXTO = { (IDENTIFIER | NUMBER | "-") };
+LETTER = ( "a" | "b" | ... | "Z" );
+DIGIT = ( "0" | "1" | ... | "9" );
+NUMBER = DIGIT, {DIGIT};
+STRING = '"', {LETTER | DIGIT | " "}, '"';
+IDENTIFIER = LETTER, {LETTER | DIGIT | "_"};
+COMMENT = "/*", {LETTER | DIGIT | " "}, "*/";
 ```
 
 ## Características
-* **Sintaxe Declarativa:** O código descreve os times e a partida de forma direta, sem a necessidade de algoritmos complexos ou lógica de fluxo.
-* **Modelagem de Atributos:** Permite definir a força de cada time através de valores numéricos para `ataque`, `defesa` e `meio_campo`, além de táticas como `formacao` e `estrategia`.
-* **Análise em Duas Etapas:**
-    * **Analisador Sintático (Flex/Bison):** Esta implementação foca exclusivamente em validar se um arquivo `.coach` está escrito corretamente de acordo com a gramática definida. A saída confirma apenas se a sintaxe é válida ou não.
-    * **Interpretador (Python):** Esta implementação vai além da validação. Ela lê os dados, armazena o estado dos times e **executa uma análise tática**, gerando o relatório (o feedback) como saída final.
+- **Linguagem Híbrida:** Combina a clareza da sintaxe declarativa para definir os times com o poder de comandos procedurais (SE, REPETIR) para criar análises complexas.
+- **Controle de Fluxo para Análise:**
+    - **SE...ENTAO...SENAO:** Permite criar análises que dependem dos atributos das equipes, exibindo mensagens diferentes para cada cenário.
+    - **REPETIR...VEZES:** Facilita a execução de múltiplas simulações de uma mesma partida para observar diferentes resultados possíveis.
+- **Simulação Dinâmica com "Fator Sorte":** O coração da linguagem. Cada vez que uma **PARTIDA** é simulada, os atributos dos times recebem uma pequena variação aleatória. Isso significa que um time mais fraco pode, com sorte, vencer um mais forte, tornando as repetições mais realistas e interessantes.
+- **Análise Semântica e Execução:** O interpretador em Python não apenas valida a sintaxe, mas também realiza uma análise semântica, gerenciando o estado dos times definidos e executando a lógica do script para gerar relatórios dinâmicos.
 
 ---
 
 ## Como Executar
-O projeto possui duas implementações distintas que podem ser executadas.
-
-### Versão 1: Analisador Sintático (Flex & Bison)
-O objetivo desta etapa é **apenas validar a sintaxe** do código.
-
-**Pré-requisitos:** `flex`, `bison`, `gcc` (ou `clang`).
-
-**Passos (via terminal, na pasta `flex/`):**
-1.  **Gerar os arquivos do parser e do scanner:**
-    ```bash
-    bison -d coach.y
-    flex coach.l
-    ```
-2.  **Compilar o analisador:**
-    ```bash
-    gcc coach.tab.c lex.yy.c -o meu_analisador
-    ```
-3.  **Executar a validação sintática:**
-    ```bash
-    ./meu_analisador < exemplo.coach
-    ```
-
-### Versão 2: Interpretador de Análise Tática (Python)
+###  Interpretador de Análise Tática (Python)
 Esta versão **executa a análise tática** e gera o relatório como saída.
 
 **Pré-requisitos:** `Python 3.x`.
@@ -128,27 +87,44 @@ Esta versão **executa a análise tática** e gera o relatório como saída.
 
 ## Exemplo de Código (`exemplo.coach`)
 ```coach
-/* Arquivo de exemplo para demonstrar a sintaxe do coachCode */
+/*
+  APS Lógica Computacional - Exemplo Final
+  Linguagem: coachCode
+  Demonstração de definição de times, condicionais,
+  loops e simulação com aleatoriedade.
+*/
 
-DEFINIR time "Real Coders" {
-    ataque = 90;
-    defesa = 75;
-    meio_campo = 80;
-    formacao = "4-3-3";
-    estrategia = "Pressao alta";
+DEFINIR time "Guerreiros da IA" {
+    ataque = 95;
+    defesa = 70;
+    meio_campo = 88;
+    formacao = 4-3-3;
+    estrategia = Pressao alta;
 }
 
-DEFINIR time "BugsUnited FC" {
-    ataque = 70;
-    defesa = 92;
-    meio_campo = 85;
-    formacao = "5-3-2";
-    estrategia = "Defesa solida";
+DEFINIR time "Gigantes do Algoritmo" {
+    ataque = 82;
+    defesa = 85;
+    meio_campo = 90;
+    formacao = 3-5-2;
+    estrategia = Posse de bola;
 }
 
-PARTIDA {
-    casa = "Real Coders";
-    visitante = "BugsUnited FC";
+MOSTRAR "Análise pré-jogo iniciada.";
+
+SE time."Guerreiros da IA".ataque > time."Gigantes do Algoritmo".ataque ENTAO {
+    MOSTRAR "Os Guerreiros possuem um ataque nominalmente superior.";
+} SENAO {
+    MOSTRAR "Os Gigantes possuem um ataque nominalmente superior ou equivalente.";
+}
+
+MOSTRAR "Iniciando simulação de 3 confrontos...";
+
+REPETIR 3 VEZES {
+    PARTIDA {
+        casa = "Guerreiros da IA";
+        visitante = "Gigantes do Algoritmo";
+    }
 }
 ```
 ---
@@ -156,40 +132,52 @@ PARTIDA {
 ## Exemplos de Saída
 Abaixo estão as saídas esperadas para o arquivo `exemplo.coach` em cada versão.
 
-### Saída da Versão 1 (Flex & Bison)
-*Esta saída confirma que a sintaxe do arquivo é válida.*
-```text
---- Iniciando Analise Sintatica do coachCode ---
 
->> Time '"Real Coders"' definido com sucesso!
-   Ataque: 90, Defesa: 75, Meio-campo: 80
-   Formacao: "4-3-3", Estrategia: "Pressao alta"
-
->> Time '"BugsUnited FC"' definido com sucesso!
-   Ataque: 70, Defesa: 92, Meio-campo: 85
-   Formacao: "5-3-2", Estrategia: "Defesa solida"
-
->> Partida configurada: "Real Coders" (casa) vs. "BugsUnited FC" (visitante)
-
---- Analise sintatica concluida com sucesso. ---
-```
-
-### Saída da Versão 2 (Compilador)
+### Saída  (Compilador)
 *Esta saída é o relatório gerado pela execução e análise do código..*
 ```text
 --- Iniciando Analise do coachCode ---
->> Time "Real Coders" definido com sucesso.
->> Time "BugsUnited FC" definido com sucesso.
+>> Time "Guerreiros da IA" definido com sucesso.
+>> Time "Gigantes do Algoritmo" definido com sucesso.
+MOSTRAR: Análise pré-jogo iniciada.
+MOSTRAR: Os Guerreiros possuem um ataque nominalmente superior.
+MOSTRAR: Iniciando simulação de 3 confrontos...
 
---- RELATÓRIO TÁTICO: Real Coders vs. BugsUnited FC ---
+[Repetição 1/3]
 
-[CONFRONTO DIRETO]
-- Ataque Casa (90) vs. Defesa Visitante (92): Vantagem Visitante
-- Meio-Campo Casa (80) vs. Meio-Campo Visitante (85): Vantagem Visitante
-- Defesa Casa (75) vs. Ataque Visitante (70): Vantagem Casa
+--- RELATÓRIO TÁTICO: Guerreiros da IA vs. Gigantes do Algoritmo ---
 
-[SUGESTÃO PARA O TIME DA CASA: Real Coders]
-- O adversário joga com 'Defesa solida'. Sugestão: adote uma estratégia de 'Posse de bola' para ter paciência e encontrar espaços.
+[SIMULAÇÃO DE CONFRONTO DIRETO]
+- Ataque Casa (95) vs. Defesa Visitante (85)
+  Resultado Simulado: [97] vs. [95] -> Vantagem Casa
+- Meio-Campo Casa (88) vs. Meio-Campo Visitante (90)
+  Resultado Simulado: [83] vs. [83] -> Equilíbrio
+- Defesa Casa (70) vs. Ataque Visitante (82)
+  Resultado Simulado: [66] vs. [84] -> Vantagem Visitante
+
+[Repetição 2/3]
+
+--- RELATÓRIO TÁTICO: Guerreiros da IA vs. Gigantes do Algoritmo ---
+
+[SIMULAÇÃO DE CONFRONTO DIRETO]
+- Ataque Casa (95) vs. Defesa Visitante (85)
+  Resultado Simulado: [89] vs. [89] -> Equilíbrio
+- Meio-Campo Casa (88) vs. Meio-Campo Visitante (90)
+  Resultado Simulado: [88] vs. [85] -> Vantagem Casa
+- Defesa Casa (70) vs. Ataque Visitante (82)
+  Resultado Simulado: [60] vs. [77] -> Vantagem Visitante
+
+[Repetição 3/3]
+
+--- RELATÓRIO TÁTICO: Guerreiros da IA vs. Gigantes do Algoritmo ---
+
+[SIMULAÇÃO DE CONFRONTO DIRETO]
+- Ataque Casa (95) vs. Defesa Visitante (85)
+  Resultado Simulado: [102] vs. [81] -> Vantagem Casa
+- Meio-Campo Casa (88) vs. Meio-Campo Visitante (90)
+  Resultado Simulado: [83] vs. [88] -> Vantagem Visitante
+- Defesa Casa (70) vs. Ataque Visitante (82)
+  Resultado Simulado: [65] vs. [90] -> Vantagem Visitante
 
 --- Analise concluida com sucesso ---
 ```
