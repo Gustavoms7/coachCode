@@ -4,69 +4,37 @@ Repositório criado para a realização da APS de Lógica Computacional
 Gustavo Mendes
 
 ## O coachCode
-SoccerScript é uma linguagem de domínio específico (DSL) criada para simular a experiência de ser um técnico de futebol. Com ela, é possível gerenciar a contratação de jogadores respeitando um orçamento definido, configurar formações táticas (como 4-4-2 ou 3-5-2), definir estratégias de jogo (como ataque rápido ou posse de bola) e treinar atributos do time, como chute e resistência. Além disso, a linguagem permite a simulação de partidas usando estruturas condicionais, possibilitando a execução de ações como atacar, defender, passar e substituir jogadores com base nas características do time e do adversário. O objetivo é oferecer uma forma divertida e programável de aplicar conceitos de lógica e estrutura de linguagens, aproximando o mundo do futebol da computação.
+O coachCode é uma linguagem de programação declarativa, feita para modelar as características essenciais de times de futebol e simular o resultado de partidas. Nela, você atua definindo a formação de cada equipe, como seu poder de ataque e defesa, e estabelecendo suas táticas, como a formação e o estilo de jogo. Com base nessas configurações, a linguagem permite que um simulador determine o vencedor do confronto de forma lógica, traduzindo sua visão tática em um resultado.
 
 ## Gramatica EBNF
 
 ```
-LETTER = ( "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z" |
-           "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" );
-
-DIGIT = ( "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" );
-
+LETTER = ( "a" | "b" | "c" | ... | "Z" );
+DIGIT = ( "0" | "1" | ... | "9" );
 NUMBER = DIGIT, {DIGIT};
-
-STRING = '"', {LETTER | " "}, '"';
-
-IDENTIFIER = LETTER, {LETTER | DIGIT | "_"};
-
-VALUE = STRING | NUMBER | LIST;
-
-LIST = "[", VALUE, {",", VALUE}, "]";
-
+STRING = '"', {LETTER | DIGIT | " "}, '"';
 COMMENT = "/*", {LETTER | DIGIT | " "}, "*/";
 
-TEAM = "time", IDENTIFIER, "(", "orcamento", NUMBER, ")", "{", { PLAYER_CONTRACT }, "}";
+/* --- Definições Específicas de Futebol --- */
 
-PLAYER_CONTRACT = "contratar", "(", STRING, ",", NUMBER, ")", ";";
+FORMACAO_TIPO = "4-4-2" | "4-3-3" | "3-5-2" | "5-3-2" ;
+ESTRATEGIA_TIPO = "Contra-ataque" | "Posse de bola" | "Pressao alta" | "Defesa solida" ;
 
-FORMATION = "formacao", "(", NUMBER, ",", NUMBER, ",", NUMBER, ")", ";";
+/* --- Estrutura Principal da Linguagem --- */
 
-STRATEGY = "estrategia", "(", STRING, ")", ";";
+PROGRAMA = {DEFINIR_TIME}, {PARTIDA};
 
-TRAINING = "treino", IDENTIFIER, "{", { TRAINING_ACTION }, "}";
+DEFINIR_TIME = "DEFINIR", "time", STRING, "{", 
+    "ataque", "=", NUMBER, ";",
+    "defesa", "=", NUMBER, ";",
+    "meio_campo", "=", NUMBER, ";",
+    "formacao", "=", FORMACAO_TIPO, ";",
+    "estrategia", "=", ESTRATEGIA_TIPO, ";",
+    "}" ;
 
-TRAINING_ACTION = "treinar", "(", STRING, ",", NUMBER, ")", ";";
-
-MATCH = "jogo", IDENTIFIER, "{", { COMMAND }, "}";
-
-COMMAND = CONDITIONAL
-        | ACTION
-        ;
-
-CONDITIONAL = "se", "(", EXPRESSION, ")", "{", { COMMAND }, "}", [ "senao", "{", { COMMAND }, "}" ];
-
-EXPRESSION = IDENTIFIER, ".", ATTRIBUTE, COMPARISON_OPERATOR, NUMBER;
-
-ATTRIBUTE = "ataque" | "defesa" | "energia" | "habilidade";
-
-COMPARISON_OPERATOR = ">" | "<" | "==" | "!=";
-
-ACTION = "chute", "(", STRING, ")", ";"
-       | "passe", "(", STRING, ")", ";"
-       | "defesa", "(", ")", ";"
-       | "substituicao", "(", STRING, ",", STRING, ")", ";"
-       | "atacar", "(", ")", ";"
-       | "defender", "(", ")", ";"
-       ;
-
-BLOCK = "{", { STATEMENT }, "}";
-
-STATEMENT = TEAM
-          | FORMATION
-          | STRATEGY
-          | TRAINING
-          | MATCH
-          ;
+PARTIDA = "PARTIDA", "{",
+    "casa", "=", STRING, ";",
+    "visitante", "=", STRING, ";",
+    "}" ;
 
 ```
